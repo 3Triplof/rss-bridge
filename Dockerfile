@@ -1,17 +1,23 @@
 FROM php:8.1-apache
 
+# dependências
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev \
-    && docker-php-ext-install zip curl
+    unzip libzip-dev \
+    && docker-php-ext-install zip curl \
+    && rm -rf /var/lib/apt/lists/*
 
+# apache
 RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-# 🔥 clona versão estável
-RUN git clone --branch 2023-07-10 https://github.com/RSS-Bridge/rss-bridge.git .
+# 🔥 copia arquivos (melhor que git clone)
+COPY . .
 
 # cache
-RUN mkdir cache && chmod -R 777 cache
+RUN mkdir -p cache && chmod -R 777 cache
+
+# 🔥 usa porta dinâmica do Railway
+ENV PORT=80
 
 EXPOSE 80

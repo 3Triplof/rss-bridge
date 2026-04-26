@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.1-apache
 
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev \
@@ -8,8 +8,10 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-RUN git clone https://github.com/RSS-Bridge/rss-bridge.git .
+# 🔥 clona versão estável
+RUN git clone --branch 2023-07-10 https://github.com/RSS-Bridge/rss-bridge.git .
 
+# cache
 RUN mkdir cache && chmod -R 777 cache
 
 EXPOSE 80
